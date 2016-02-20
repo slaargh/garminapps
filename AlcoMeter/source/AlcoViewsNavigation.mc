@@ -9,12 +9,16 @@ using AlcoViews;
 // view order: // main --start--> history --next--> sober  -next--> graph
    class DrinkMenuInputDelegate extends Ui.MenuInputDelegate{
 
+        var _bartender;
+
+        function initialize(bartender){
+            _bartender = bartender;
+        }
+
         function onMenuItem(item){
             var selectedNumber = item;
 
-            if(item == 0){
-                System.println("mmm bier");
-            }
+            var drink = _bartender.makeDrink(item);
 
             return true;
         }
@@ -25,14 +29,14 @@ using AlcoViews;
        function onSelect() {
             var menu = new Menu();
             var bartender = new Bartender();
-            var drinkList = bartender.getDrinklist();
+            var drinkList = bartender.getDrinkList();
 
             for(var i = 0; i < drinkList.size(); i++){
                 menu.addItem(drinkList[i].getDisplayName(),drinkList[i].id);
             }
 
             menu.setTitle("Drink menu");
-            Ui.pushView(menu, new DrinkMenuInputDelegate() , SLIDE_LEFT);
+            Ui.pushView(menu, new DrinkMenuInputDelegate(bartender) , SLIDE_LEFT);
             Ui.requestUpdate();
             return true;
         }

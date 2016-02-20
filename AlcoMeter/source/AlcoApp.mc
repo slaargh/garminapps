@@ -2,6 +2,7 @@ using Toybox.Application as App;
 using AlcoViews;
 using AlcoViewsNavigation;
 using Toybox.System as Sys;
+using Toybox.Time as Time;
 
 class AlcoCalc {
 
@@ -99,7 +100,9 @@ class Drinkable{
 
 class Bartender{
 
-    function getDrinklist(){
+    const AlcoholDensity = 789;
+
+    function getDrinkList(){
         var drink1 = new Drinkable();
         drink1.name = "Beer III";
         drink1.percent = 4.5;
@@ -115,6 +118,32 @@ class Bartender{
         var drinkList = [drink1, drink2];
 
         return drinkList;
+    }
+
+    function makeDrink(id){
+        var drinks = getDrinkList();
+
+        var drinkable = null;
+
+        // the id is a symbol, could a dictionary be used for better perf?
+        for(var i = 0; i < drinks.size(); i++){
+            if(drinks[i].id == id){
+                drinkable = drinks[i];
+                break;
+            }
+        }
+
+        var alcoholGrams = drinkable.volume * drinkable.percent / 100 * AlcoholDensity;
+
+        var roundedGrams = alcoholGrams.format("%.3G");
+
+        System.println(roundedGrams);
+
+        var now = new Time.Moment();
+        var drink = new Drink(roundedGrams, now);
+
+        return drink;
+
     }
 }
 
