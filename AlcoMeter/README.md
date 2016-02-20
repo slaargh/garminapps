@@ -13,13 +13,13 @@ Had a drink or two? Fancy one more but not sure if you really should? No worries
 - Persist consumed drinks
 - Remove drinks from history that don't have effect on the BAC levels (x minutes old drinks)
 - Globalization/Localization:
--- Support for other bac unit
--- text translations
--- drinks (now only in liters)
+	* Support for other bac unit
+	* text translations
+	* drinks (now only in liters)
 - Configurable user settings: 
--- bac unit (current is used bac by mass, not bac by volume as in for example in the states) 
--- alcohol burn rate
--- own drinks
+	* bac unit (current is used bac by mass, not bac by volume as in for example in the states) 
+	* alcohol burn rate
+	* own drinks
 - Remove previous drink
 
 ## Planned code improvements
