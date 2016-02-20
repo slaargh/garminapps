@@ -3,68 +3,121 @@ using AlcoViews;
 using AlcoViewsNavigation;
 using Toybox.System as Sys;
 
-class AlcoMeter{
+class AlcoCalc {
 
-    var AlcoholBurnRate = 0.015;
+    var _userInfo;
+    var _drinks;
 
-    function bloodAlcohol(drinks){
+    function initialize(userInfo, drinks){
+        _userInfo = userInfo;
+        _drinks = drinks;
+    }
+
+    function promillesNow(){
+        var gramsOfAlcohol = 4*12; // TODO CALC this stuff out
+
+        var promilles = gramsOfAlcohol / (_userInfo.getRValue() * _userInfo.getWeight());
+
+        return promilles;
+    }
+}
+
+class UserInfo{
+
+    function getBurnRate(){
+        // TODO: make this a setting / find rule for women (studies point out that women might actually burn alcohol more efficiently..)
+        // Typical male burns one gram of alcohol for every 10 kilograms of weight in an hour
+        var burnRate = getWeight() / 10/ 60 /60; // in seconds?
+
+        return burnRate;
+    }
+
+    function getWeight(){
+        var profile = UserProfile.getProfile();
+        var weight = profile.weight;
+
+        // TODO: AP doc states weight is in grams, is this true if weightUnits is not metric??
+        var weightInKilos = weight / 1000;
+
+        System.println(weightInKilos);
+        return weightInKilos;
+
+    }
+
+    function getRValue(){
         var profile = UserProfile.getProfile();
         var gender = profile.gender;
+
         var r = 0.66;
 
         if(gender == UserProfile.GENDER_MALE){
-            r = 0.70;
+            r = 0.75;
         }
 
-        var weight = profile.weight;
-
-        var deviceSettings = new Sys.DeviceSettings();
-
-        var weightUnit = deviceSettings.weightUnits;
-
-        if(weightUnit !=  Sys.UNIT_METRIC){
-            weight = weight * 0.4535923;
-        }
-
-
-        // todo: simulator sets weight to 30844.277344 kgs?
-        if(weight > 200){
-            weight = 70;
-        }
-
-        // TODO Calcualte hours from first drink
-        //var moment = new Moment();
-        //var now = moment.now()
-        //var hoursSinceFirstDrink = now.substract(firstDrinkTime);
-        var hoursSinceFirstDrink = 0;
-
-        // todo calculate grams of pure alcohol from the drinks
-        // now assume 1 drink = 1 standard issue drink
-        // for future refence = volume ml * ac * 0,789 ~= grams of alcohol
-        var alcoholGrams = drinks * 12; // finnish standard issue drink has approx 12 grams of alcohol
-
-        var bac =  widmarkEquation(alcoholGrams, hoursSinceFirstDrink, weight, r);
-
-        // Note: BAC is in g / mL (US), conver to mg/g (used in Scandinavia)
-        bac = bac * 0.943; // TODO: check conversion accuracy & make this a use preference
-
-        Sys.println(bac);
-
-        var bacString = bac.toString().substring(0,4);
-
-        return bacString;
-    }
-
-    function widmarkEquation(alhocholInGrams, hours, weight, r){
-        var bac = ((alhocholInGrams / (weight * 1000 * r)) * 100) - AlcoholBurnRate * hours;
-        Sys.println(bac);
-
-        if(bac <= 0){
-            return 0;
-        }
-        return bac;
+        return r;
     }
 }
+
+class Drink{
+
+    var _grams;
+    var _consumedTime;
+
+    function initialize(grams, consumedTime){
+        _grams = grams;
+        _consumedTime = consumedTime;
+    }
+
+    function getGramsOfAlcohol(){
+        return _grams;
+    }
+
+    function getTimeConsumed(){
+        return _consumedTime;
+    }
+}
+
+class Drinkable{
+    var name;
+    var percent;
+    var volume;
+    var id;
+
+    function getDisplayName(){
+        var displayVolume = volume.format("%.3G") + " l";
+
+        if( volume < 0.3) {
+            var volumeInCl = volume * 1000;
+            displayVolume = volumeInCl.format("%.3G") + " cl";
+        }
+
+        var string = name + " (" + percent.format("%.2G") + "%) " + displayVolume;
+
+        return string;
+    }
+}
+
+class Bartender{
+
+    function getDrinklist(){
+        var drink1 = new Drinkable();
+        drink1.name = "Beer III";
+        drink1.percent = 4.5;
+        drink1.volume = 0.33;
+        drink1.id = 0;
+
+        var drink2 = new Drinkable();
+        drink2.name = "Viinaa";
+        drink2.percent = 40;
+        drink2.volume = 0.04;
+        drink2.id = 1;
+
+        var drinkList = [drink1, drink2];
+
+        return drinkList;
+    }
+}
+
 
 
 class BeersApp extends App.AppBase {
@@ -84,8 +137,11 @@ class BeersApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-        var alcoMeter = new AlcoMeter();
-        var bac = alcoMeter.bloodAlcohol(5);
+        var userInfo = new UserInfo();
+        var drinks = new [2];
+        var alcoCalc = new AlcoCalc(userInfo, drinks);
+        var bac = alcoCalc.promillesNow();
+        System.println(bac);
         return [ new AlcoViews.MainView(bac), new AlcoViewsNavigation.MainViewBehaviourDelegate() ];
     }
 

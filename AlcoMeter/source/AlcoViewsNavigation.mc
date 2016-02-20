@@ -7,8 +7,37 @@ using AlcoViews;
 
  // todo simpler way of navigating between views
 // view order: // main --start--> history --next--> sober  -next--> graph
+   class DrinkMenuInputDelegate extends Ui.MenuInputDelegate{
+
+        function onMenuItem(item){
+            var selectedNumber = item;
+
+            if(item == 0){
+                System.println("mmm bier");
+            }
+
+            return true;
+        }
+    }
 
     class HistoryViewBehaviorDelegate extends Ui.BehaviorDelegate {
+
+       function onSelect() {
+            var menu = new Menu();
+            var bartender = new Bartender();
+            var drinkList = bartender.getDrinklist();
+
+            for(var i = 0; i < drinkList.size(); i++){
+                menu.addItem(drinkList[i].getDisplayName(),drinkList[i].id);
+            }
+
+            menu.setTitle("Drink menu");
+            Ui.pushView(menu, new DrinkMenuInputDelegate() , SLIDE_LEFT);
+            Ui.requestUpdate();
+            return true;
+        }
+
+
         function onNextPage() {
             Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate() , SLIDE_UP);
             Ui.requestUpdate();
@@ -52,7 +81,7 @@ using AlcoViews;
 
     class MainViewBehaviourDelegate extends Ui.BehaviorDelegate {
         function onSelect() {
-            Ui.switchToView(new AlcoViews.HistoryView(), new HistoryViewBehaviorDelegate() , SLIDE_LEFT);
+            Ui.pushView(new AlcoViews.HistoryView(), new HistoryViewBehaviorDelegate() , SLIDE_LEFT);
             Ui.requestUpdate();
             return true;
         }
