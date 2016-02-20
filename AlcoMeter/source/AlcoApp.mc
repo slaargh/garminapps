@@ -33,7 +33,6 @@ class AlcoCalc {
     }
 
     function addDrink(drink){
-        // TODO list functions to new class?
         var newDrinkArray = new [_drinks.size() + 1];
 
         for(var i = 0; i < _drinks.size(); i++){
@@ -133,7 +132,6 @@ class UserInfo{
 class Drink{
 
     var _name;
-
     var _grams;
     var _consumedTime;
 
@@ -222,9 +220,7 @@ class Bartender{
 
         var alcoholGrams = drinkable.volume * drinkable.percent / 100 * AlcoholDensity;
 
-        var roundedGrams = alcoholGrams;
-
-        var drink = new Drink(roundedGrams, Time.now(), drinkable.getDisplayName());
+        var drink = new Drink(alcoholGrams, Time.now(), drinkable.getDisplayName());
 
         return drink;
     }

@@ -47,8 +47,15 @@ module AlcoViews{
 
                 return true;
             }
+            var formatPromilles;
+            if(promillesNow > 1){
+                formatPromilles = promillesNow.format("%.3G");
+            }
+            else{
+             formatPromilles = promillesNow.format("%.2G");
+            }
 
-            var formatPromilles = promillesNow.format("%.3G");
+
 
             var txt = new Text({:text => formatPromilles, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
             txt.setLocation(100, 80);
@@ -64,14 +71,20 @@ module AlcoViews{
 
             if(minutesUntilSober > 60){
                 var hoursUntilSober = minutesUntilSober / 60.0;
-                // TODO This should prolly be CEILING
-                soberText = hoursUntilSober.format("%.1G") + "+ hours til sober";
+
+                if(hoursUntilSober < 10){
+                    soberText = hoursUntilSober.format("%.1G") + "+ hours til sober";
+                }
+                else{
+                    soberText = hoursUntilSober.format("%.2G") + " hours til sober";
+                }
+
             }
             else if ( minutesUntilSober == 0){
                 soberText = "";
             }
             else {
-            soberText = hoursUntilSober.format("%.2G") + "+ mins til sober";
+                soberText = minutesUntilSober.format("%.2G") + "+ mins til sober";
             }
 
             var txt3 = new Text({:text => soberText, :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
