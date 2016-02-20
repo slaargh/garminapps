@@ -31,7 +31,22 @@ module AlcoViews{
         function onUpdate(dc) {
             View.onUpdate(dc);
 
+            dc.drawBitmap( 20, 50, _image );
+
             var promillesNow = _alcoCalc.promillesNow();
+
+            if(promillesNow == 0){
+                var noDrinkTxt1 = new Text({:text => "Press start twice", :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_TINY });
+                noDrinkTxt1.setLocation(90, 70);
+                noDrinkTxt1.draw(dc);
+
+                var noDrinkTxt2 = new Text({:text => "to add drinks!", :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_TINY });
+                noDrinkTxt2.setLocation(100, 100);
+                noDrinkTxt2.draw(dc);
+
+
+                return true;
+            }
 
             var formatPromilles = promillesNow.format("%.3G");
 
@@ -39,16 +54,31 @@ module AlcoViews{
             txt.setLocation(100, 80);
             txt.draw(dc);
 
-            dc.drawBitmap( 20, 50, _image );
-
             var drinkCount = _alcoCalc.getConsumedDrinks();
             var txt2 = new Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_SMALL });
             txt2.setLocation(100, 70);
             txt2.draw(dc);
 
-            var txt3 = new Text({:text => "5 hours til sober", :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
-            txt3.setLocation(70, 165);
+            var minutesUntilSober = _alcoCalc.minutesUntilSober();
+            var soberText;
+
+            if(minutesUntilSober > 60){
+                var hoursUntilSober = minutesUntilSober / 60.0;
+                // TODO This should prolly be CEILING
+                soberText = hoursUntilSober.format("%.1G") + "+ hours til sober";
+            }
+            else if ( minutesUntilSober == 0){
+                soberText = "";
+            }
+            else {
+            soberText = hoursUntilSober.format("%.2G") + "+ mins til sober";
+            }
+
+            var txt3 = new Text({:text => soberText, :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
+            txt3.setLocation(50, 165);
             txt3.draw(dc);
+
+            return true;
 
 
             // Call the parent onUpdate function to redraw the layout

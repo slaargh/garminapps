@@ -23,6 +23,9 @@ class AlcoCalc {
         var history = new [_drinks.size()];
 
         for(var i = 0; i < _drinks.size(); i++){
+            if(_drinks[i] == null){
+                continue;
+            }
             history[i] = _drinks[i].getDisplayName();
         }
 
@@ -30,8 +33,7 @@ class AlcoCalc {
     }
 
     function addDrink(drink){
-
-        // TODO move to own class, drinks
+        // TODO list functions to new class?
         var newDrinkArray = new [_drinks.size() + 1];
 
         for(var i = 0; i < _drinks.size(); i++){
@@ -44,15 +46,52 @@ class AlcoCalc {
     }
 
     function promillesNow(){
-        var gramsOfAlcohol = 0;
 
-        for(var i = 0; i < _drinks.size(); i++){
-            gramsOfAlcohol += _drinks[i].getGramsOfAlcohol();
+        var gramsOfAlcohol = getGramsOfAlcoholNow();
+
+        if(gramsOfAlcohol <= 0){
+            return 0;
         }
 
         var promilles = gramsOfAlcohol / (_userInfo.getRValue() * _userInfo.getWeight());
-
         return promilles;
+    }
+
+    function getGramsOfAlcoholNow(){
+
+        var drinksTotal = _drinks.size();
+
+        if(drinksTotal == 0){
+            return 0;
+        }
+
+        var gramsOfAlcohol = 0;
+        var now = Time.now();
+
+        for(var i = 0; i < drinksTotal; i++){
+            var drink = _drinks[i];
+
+            if(drink == null){
+                continue;
+            }
+
+            var minutesSinceDrank = now.subtract(drink.getTimeConsumed()).value() / 60.0;
+            var gramsLeft = drink.getGramsOfAlcohol() - _userInfo.getBurnRate()* minutesSinceDrank;
+
+            if(gramsLeft < 0){
+                continue;
+            }
+             gramsOfAlcohol += gramsLeft;
+
+         }
+         return gramsOfAlcohol;
+    }
+
+    function minutesUntilSober(){
+        var alcoholLeftToBurn = getGramsOfAlcoholNow();
+        var minutes = alcoholLeftToBurn / _userInfo.getBurnRate();
+        return minutes;
+
     }
 }
 
@@ -61,7 +100,7 @@ class UserInfo{
     function getBurnRate(){
         // TODO: make this a setting / find rule for women (studies point out that women might actually burn alcohol more efficiently..)
         // Typical male burns one gram of alcohol for every 10 kilograms of weight in an hour
-        var burnRate = getWeight() / 10/ 60 /60; // in seconds?
+        var burnRate = getWeight() / 10.0 / 60; // in minutes
 
         return burnRate;
     }
@@ -71,9 +110,8 @@ class UserInfo{
         var weight = profile.weight;
 
         // TODO: AP doc states weight is in grams, is this true if weightUnits is not metric??
-        var weightInKilos = weight / 1000;
+        var weightInKilos = weight / 1000.0;
 
-        System.println(weightInKilos);
         return weightInKilos;
 
     }
@@ -100,7 +138,7 @@ class Drink{
     var _consumedTime;
 
     function initialize(grams, consumedTime, name){
-        _grams = grams.toNumber();
+        _grams = grams;
         _consumedTime = consumedTime;
         _name = name;
     }
@@ -114,13 +152,11 @@ class Drink{
     }
 
     function getDisplayName(){
-        //var greg = new Time.Gregorian();
         if(_consumedTime == null){
             return "";
         }
 
-
-        var infoa = Greg.info(_consumedTime, Time.FORMAT_SHORT);
+       var infoa = Greg.info(_consumedTime, Time.FORMAT_SHORT);
        if(infoa == null){
             return "";
        }
@@ -151,7 +187,7 @@ class Drinkable{
 
 class Bartender{
 
-    const AlcoholDensity = 789;
+    const AlcoholDensity = 789.0;
 
     function getDrinkList(){
         var drink1 = new Drinkable();
@@ -186,9 +222,7 @@ class Bartender{
 
         var alcoholGrams = drinkable.volume * drinkable.percent / 100 * AlcoholDensity;
 
-        var roundedGrams = alcoholGrams.format("%.3G");
-
-        System.println(roundedGrams);
+        var roundedGrams = alcoholGrams;
 
         var drink = new Drink(roundedGrams, Time.now(), drinkable.getDisplayName());
 
@@ -217,16 +251,20 @@ class BeersApp extends App.AppBase {
     function getInitialView() {
         var userInfo = new UserInfo();
 
-        var drink1 = new Drink(12,Time.now(), "beer 3");
-        var drink2 = new Drink(12,Time.now(),  "beer 3");
-        var drink3 = new Drink(12,Time.now(), "beer 3");
-        var drink4 = new Drink(12,Time.now(),  "beer 3");
+// never comment out code
+  //      var past = Greg.moment({:hour=> 23, :minute=>19, :day=>20});
+   //     var longTimeAgo = Greg.moment({:hour=> 6, :minute=>0, :day=>20});
 
-        var drinks = [drink1, drink2, drink3, drink4 ];
+//        var drink1 = new Drink(12, past, "beer 3");
+//        var drink2 = new Drink(12, past,  "beer 3");
+//        var drink3 = new Drink(12, longTimeAgo, "beer 3");
+//        var drink4 = new Drink(12, longTimeAgo,  "beer 3");
+
+//        var drinks = [drink1, drink2, drink3, drink4 ];
+        var drinks = new [0];
 
         var alcoCalc = new AlcoCalc(userInfo, drinks);
         var bac = alcoCalc.promillesNow();
-        System.println(bac);
         return [ new AlcoViews.MainView(alcoCalc), new AlcoViewsNavigation.MainViewBehaviourDelegate(alcoCalc) ];
     }
 
