@@ -10,9 +10,11 @@ using AlcoViews;
    class DrinkMenuInputDelegate extends Ui.MenuInputDelegate{
 
         var _bartender;
+        var _alcoCalc;
 
-        function initialize(bartender){
+        function initialize(bartender, alcoCalc){
             _bartender = bartender;
+            _alcoCalc = alcoCalc;
         }
 
         function onMenuItem(item){
@@ -20,11 +22,20 @@ using AlcoViews;
 
             var drink = _bartender.makeDrink(item);
 
+            _alcoCalc.addDrink(drink);
+
             return true;
         }
     }
 
     class HistoryViewBehaviorDelegate extends Ui.BehaviorDelegate {
+
+        var _alcoCalc;
+
+        function initialize(alcoCalc){
+            _alcoCalc = alcoCalc;
+        }
+
 
        function onSelect() {
             var menu = new Menu();
@@ -36,56 +47,76 @@ using AlcoViews;
             }
 
             menu.setTitle("Drink menu");
-            Ui.pushView(menu, new DrinkMenuInputDelegate(bartender) , SLIDE_LEFT);
+            Ui.pushView(menu, new DrinkMenuInputDelegate(bartender, _alcoCalc) , SLIDE_LEFT);
             Ui.requestUpdate();
             return true;
         }
 
 
         function onNextPage() {
-            Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate() , SLIDE_UP);
+            Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
             Ui.requestUpdate();
             return true;
         }
 
         function onPreviousPage() {
-            Ui.switchToView(new AlcoViews.GraphView(), new GraphViewBehaviorDelegate() , SLIDE_DOWN);
+            Ui.switchToView(new AlcoViews.GraphView(), new GraphViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
             Ui.requestUpdate();
             return true;
         }
     }
 
     class SoberViewBehaviorDelegate extends Ui.BehaviorDelegate {
+
+        var _alcoCalc;
+        function initialize(alcoCalc){
+            _alcoCalc = alcoCalc;
+        }
+
         function onNextPage() {
-            Ui.switchToView(new AlcoViews.GraphView(), new GraphViewBehaviorDelegate() , SLIDE_UP);
+            Ui.switchToView(new AlcoViews.GraphView(), new GraphViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
             Ui.requestUpdate();
             return true;
         }
 
         function onPreviousPage() {
-            Ui.switchToView(new AlcoViews.HistoryView(), new HistoryViewBehaviorDelegate() , SLIDE_DOWN);
+            Ui.switchToView(new AlcoViews.HistoryView(_alcoCalc), new HistoryViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
             Ui.requestUpdate();
             return true;
         }
     }
 
     class GraphViewBehaviorDelegate extends Ui.BehaviorDelegate {
+
+        var _alcoCalc;
+        function initialize(alcoCalc){
+            _alcoCalc = alcoCalc;
+        }
+
         function onNextPage() {
-            Ui.switchToView(new AlcoViews.HistoryView(), new HistoryViewBehaviorDelegate() , SLIDE_UP);
+            Ui.switchToView(new AlcoViews.HistoryView(_alcoCalc), new HistoryViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
             Ui.requestUpdate();
             return true;
         }
 
         function onPreviousPage() {
-            Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate() , SLIDE_DOWN);
+            Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
             Ui.requestUpdate();
             return true;
         }
     }
 
     class MainViewBehaviourDelegate extends Ui.BehaviorDelegate {
+
+        var _alcoCalc;
+
+        function initialize(alcoCalc){
+            _alcoCalc = alcoCalc;
+        }
+
+
         function onSelect() {
-            Ui.pushView(new AlcoViews.HistoryView(), new HistoryViewBehaviorDelegate() , SLIDE_LEFT);
+            Ui.pushView(new AlcoViews.HistoryView(_alcoCalc), new HistoryViewBehaviorDelegate(_alcoCalc) , SLIDE_LEFT);
             Ui.requestUpdate();
             return true;
         }

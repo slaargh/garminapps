@@ -3,6 +3,7 @@ using AlcoViews;
 using AlcoViewsNavigation;
 using Toybox.System as Sys;
 using Toybox.Time as Time;
+using Toybox.Time.Gregorian as Greg;
 
 class AlcoCalc {
 
@@ -14,8 +15,40 @@ class AlcoCalc {
         _drinks = drinks;
     }
 
+    function getConsumedDrinks(){
+        return _drinks.size();
+    }
+
+    function getDrinkHistory(){
+        var history = new [_drinks.size()];
+
+        for(var i = 0; i < _drinks.size(); i++){
+            history[i] = _drinks[i].getDisplayName();
+        }
+
+        return history;
+    }
+
+    function addDrink(drink){
+
+        // TODO move to own class, drinks
+        var newDrinkArray = new [_drinks.size() + 1];
+
+        for(var i = 0; i < _drinks.size(); i++){
+            newDrinkArray[i] = _drinks[i];
+        }
+
+        newDrinkArray[newDrinkArray.size()-1] = drink;
+
+        _drinks = newDrinkArray;
+    }
+
     function promillesNow(){
-        var gramsOfAlcohol = 4*12; // TODO CALC this stuff out
+        var gramsOfAlcohol = 0;
+
+        for(var i = 0; i < _drinks.size(); i++){
+            gramsOfAlcohol += _drinks[i].getGramsOfAlcohol();
+        }
 
         var promilles = gramsOfAlcohol / (_userInfo.getRValue() * _userInfo.getWeight());
 
@@ -61,12 +94,15 @@ class UserInfo{
 
 class Drink{
 
+    var _name;
+
     var _grams;
     var _consumedTime;
 
-    function initialize(grams, consumedTime){
-        _grams = grams;
+    function initialize(grams, consumedTime, name){
+        _grams = grams.toNumber();
         _consumedTime = consumedTime;
+        _name = name;
     }
 
     function getGramsOfAlcohol(){
@@ -75,6 +111,21 @@ class Drink{
 
     function getTimeConsumed(){
         return _consumedTime;
+    }
+
+    function getDisplayName(){
+        //var greg = new Time.Gregorian();
+        if(_consumedTime == null){
+            return "";
+        }
+
+
+        var infoa = Greg.info(_consumedTime, Time.FORMAT_SHORT);
+       if(infoa == null){
+            return "";
+       }
+
+        return infoa.hour  +":" + infoa.min +" "  +  _name;
     }
 }
 
@@ -139,11 +190,9 @@ class Bartender{
 
         System.println(roundedGrams);
 
-        var now = new Time.Moment();
-        var drink = new Drink(roundedGrams, now);
+        var drink = new Drink(roundedGrams, Time.now(), drinkable.getDisplayName());
 
         return drink;
-
     }
 }
 
@@ -167,11 +216,18 @@ class BeersApp extends App.AppBase {
     //! Return the initial view of your application here
     function getInitialView() {
         var userInfo = new UserInfo();
-        var drinks = new [2];
+
+        var drink1 = new Drink(12,Time.now(), "beer 3");
+        var drink2 = new Drink(12,Time.now(),  "beer 3");
+        var drink3 = new Drink(12,Time.now(), "beer 3");
+        var drink4 = new Drink(12,Time.now(),  "beer 3");
+
+        var drinks = [drink1, drink2, drink3, drink4 ];
+
         var alcoCalc = new AlcoCalc(userInfo, drinks);
         var bac = alcoCalc.promillesNow();
         System.println(bac);
-        return [ new AlcoViews.MainView(bac), new AlcoViewsNavigation.MainViewBehaviourDelegate() ];
+        return [ new AlcoViews.MainView(alcoCalc), new AlcoViewsNavigation.MainViewBehaviourDelegate(alcoCalc) ];
     }
 
 }

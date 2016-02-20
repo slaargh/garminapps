@@ -6,11 +6,11 @@ using Toybox.System as Sys;
 module AlcoViews{
 
     class MainView extends Ui.View {
-        var _bac;
+        var _alcoCalc;
         var _image;
 
-        function initialize(bac) {
-            _bac = bac;
+        function initialize(alcoCalc) {
+            _alcoCalc = alcoCalc;
             View.initialize();
         }
 
@@ -31,21 +31,24 @@ module AlcoViews{
         function onUpdate(dc) {
             View.onUpdate(dc);
 
-            var formatBac = _bac.format("%.3G");
+            var promillesNow = _alcoCalc.promillesNow();
 
-            var teksti = new Text({:text => formatBac, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
-            teksti.setLocation(100, 80);
-            teksti.draw(dc);
+            var formatPromilles = promillesNow.format("%.3G");
+
+            var txt = new Text({:text => formatPromilles, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
+            txt.setLocation(100, 80);
+            txt.draw(dc);
 
             dc.drawBitmap( 20, 50, _image );
 
-            var teksti2 = new Text({:text => "x 5", :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_SMALL });
-            teksti2.setLocation(100, 70);
-            teksti2.draw(dc);
+            var drinkCount = _alcoCalc.getConsumedDrinks();
+            var txt2 = new Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_SMALL });
+            txt2.setLocation(100, 70);
+            txt2.draw(dc);
 
-            var teksti3 = new Text({:text => "5 hours til sober", :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
-            teksti3.setLocation(70, 165);
-            teksti3.draw(dc);
+            var txt3 = new Text({:text => "5 hours til sober", :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
+            txt3.setLocation(70, 165);
+            txt3.draw(dc);
 
 
             // Call the parent onUpdate function to redraw the layout
@@ -61,7 +64,9 @@ module AlcoViews{
 
     class HistoryView extends Ui.View {
 
-        function initialize() {
+        var _alcoCalc;
+        function initialize(alcoCalc) {
+            _alcoCalc = alcoCalc;
             View.initialize();
         }
 
@@ -81,9 +86,27 @@ module AlcoViews{
         function onUpdate(dc) {
             // call base to reset view
             View.onUpdate(dc);
-            var teksti = new Text({:text => "History", :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_SMALL });
+
+
+
+            var teksti = new Text({:text => "History", :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_SMALL });
             teksti.setLocation(50, 10);
             teksti.draw(dc);
+
+            var history = _alcoCalc.getDrinkHistory();
+
+            System.println(history.size());
+
+            var size = history.size();
+            for(var i = size-1; i >= 0; i--){
+                System.println(history[i]);
+                var teksti = new Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
+                teksti.setLocation(50, 10 + 20*(size-i));
+                teksti.draw(dc);
+
+            }
+
+
             return true;
         }
 
