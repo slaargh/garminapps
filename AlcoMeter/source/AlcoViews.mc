@@ -138,13 +138,13 @@ module AlcoViews{
 
             var history = _alcoCalc.getDrinkHistory();
 
-            System.println(history.size());
+            //System.println(history.size());
 
             var size = history.size();
             for(var i = size-1; i >= 0; i--){
-                System.println(history[i]);
+                //System.println(history[i]);
                 var teksti = new Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
-                teksti.setLocation(50, 10 + 20*(size-i));
+                teksti.setLocation(41, 10 + 20*(size-i));
                 teksti.draw(dc);
 
             }

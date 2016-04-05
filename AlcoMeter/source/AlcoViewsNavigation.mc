@@ -21,10 +21,13 @@ using AlcoViews;
             var selectedNumber = item;
 
             if(item == -1){
-                // TODO remove previous
+                _alcoCalc.removePrevious();
+            }
+            else if ( item == -2){
+                _alcoCalc.removeAll();
             }
             else{
-                var drink = _bartender.makeDrink(item);
+                var drink = _bartender.makeDrink(item, Time.now());
 
                 _alcoCalc.addDrink(drink);
             }
@@ -41,11 +44,18 @@ using AlcoViews;
             _alcoCalc = alcoCalc;
         }
 
+        function onBack(){
+
+        Ui.popView(Ui.SLIDE_RIGHT);
+        return true;
+        }
+
 
        function onSelect() {
             var menu = new Menu();
             var bartender = new Bartender();
             var drinkList = bartender.getDrinkList();
+
 
             for(var i = 0; i < drinkList.size(); i++){
                 menu.addItem(drinkList[i].getDisplayName(),drinkList[i].id);
@@ -53,6 +63,7 @@ using AlcoViews;
 
             // dont want to lose that nice history of last bier accidently so place the remove selection as last :)
             menu.addItem("Remove previous",-1);
+            menu.addItem("Remove all",-2);
             menu.setTitle("Drink menu");
             Ui.pushView(menu, new DrinkMenuInputDelegate(bartender, _alcoCalc) , SLIDE_LEFT);
             Ui.requestUpdate();
