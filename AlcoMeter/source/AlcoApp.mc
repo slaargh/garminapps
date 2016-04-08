@@ -5,18 +5,6 @@ using Toybox.System as Sys;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Greg;
 
-
-class SavedDrink{
-    var Id;
-    var Ticks;
-
-    function initialize(id, ticks){
-        Id = id;
-        Ticks = ticks;
-    }
-
-}
-
 class AlcoCalc {
 
     var _userInfo;
@@ -117,7 +105,7 @@ class AlcoCalc {
 
     function addDrink(drink){
 
-        // one can drink more than 20 but not in such fastion that the the first drink is still in blood
+        // one can drink more than 21 but not in such fashon that the the first drink is still in blood
         // except for the professionals
         if(_drinks.size() > 20){
             removeOldest();
@@ -272,7 +260,7 @@ class Drinkable{
         var displayVolume = volume.format("%.3G") + " l";
 
         if( volume < 0.3) {
-            var volumeInCl = volume * 1000;
+            var volumeInCl = volume * 100;
             displayVolume = volumeInCl.format("%.3G") + " cl";
         }
 
@@ -354,7 +342,15 @@ class Bartender{
         drink11.volume = 0.33;
         drink11.id = 10;
 
-        var drinkList = [drink1, drink2, drink9, drink7, drink8, drink3, drink4, drink5, drink10, drink11, drink6 ];
+
+
+        var drink12 = new Drinkable();
+        drink12.name = "Viini";
+        drink12.percent = 13;
+        drink12.volume = 0.16;
+        drink12.id = 11;
+
+        var drinkList = [drink1, drink2, drink9, drink7, drink8, drink3, drink4, drink5, drink10, drink11, drink12, drink6 ];
 
         return drinkList;
     }
@@ -427,8 +423,8 @@ class BeersApp extends App.AppBase {
 
     //! onStop() is called when your application is exiting
     function onStop() {
-    // persist stuffs from alcocalc!
         save();
+        _alcoCalc = null;
     }
 
     function save(){

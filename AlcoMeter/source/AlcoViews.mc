@@ -36,55 +36,42 @@ module AlcoViews{
             var promillesNow = _alcoCalc.promillesNow();
 
             if(promillesNow == 0){
-                var noDrinkTxt1 = new Text({:text => "Press start twice", :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_TINY });
+                var noDrinkTxt1 = new Text({:text => "Press start twice", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
                 noDrinkTxt1.setLocation(90, 70);
                 noDrinkTxt1.draw(dc);
 
-                var noDrinkTxt2 = new Text({:text => "to add drinks!", :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_TINY });
+                var noDrinkTxt2 = new Text({:text => "to add drinks!", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
                 noDrinkTxt2.setLocation(100, 100);
                 noDrinkTxt2.draw(dc);
 
 
                 return true;
             }
-            var formatPromilles;
-            if(promillesNow > 1){
-                formatPromilles = promillesNow.format("%.3G");
-            }
-            else{
-             formatPromilles = promillesNow.format("%.2G");
-            }
-
-
+            var formatPromilles = promillesNow.format("%.2f");
 
             var txt = new Text({:text => formatPromilles, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
             txt.setLocation(100, 80);
             txt.draw(dc);
 
             var drinkCount = _alcoCalc.getConsumedDrinks();
-            var txt2 = new Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_SMALL });
+            var txt2 = new Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE});
             txt2.setLocation(100, 70);
             txt2.draw(dc);
 
             var minutesUntilSober = _alcoCalc.minutesUntilSober();
             var soberText;
 
-            if(minutesUntilSober > 60){
+            if(minutesUntilSober >= 60){
                 var hoursUntilSober = minutesUntilSober / 60.0;
 
-                if(hoursUntilSober < 10){
-                    soberText = hoursUntilSober.format("%.1G") + "+ hours til sober";
-                }
-                else{
-                    soberText = hoursUntilSober.format("%.2G") + " hours til sober";
-                }
+                soberText = hoursUntilSober.format("%d") + "+ hours til sober";
 
             }
             else if ( minutesUntilSober == 0){
                 soberText = "";
             }
             else {
-                soberText = minutesUntilSober.format("%.2G") + "+ mins til sober";
+                soberText = minutesUntilSober.format("%d") + "+ mins til sober";
             }
 
             var txt3 = new Text({:text => soberText, :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
@@ -132,7 +119,7 @@ module AlcoViews{
 
 
 
-            var teksti = new Text({:text => "History", :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_SMALL });
+            var teksti = new Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
             teksti.setLocation(50, 10);
             teksti.draw(dc);
 
@@ -144,7 +131,7 @@ module AlcoViews{
             for(var i = size-1; i >= 0; i--){
                 //System.println(history[i]);
                 var teksti = new Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
-                teksti.setLocation(41, 10 + 20*(size-i));
+                teksti.setLocation(35, 10 + 20*(size-i));
                 teksti.draw(dc);
 
             }
@@ -182,7 +169,7 @@ module AlcoViews{
         function onUpdate(dc) {
             // call base to reset view
             View.onUpdate(dc);
-            var teksti = new Text({:text => "Sober", :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_SMALL });
+            var teksti = new Text({:text => "Sober", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
             teksti.setLocation(50, 10);
             teksti.draw(dc);
             return true;
@@ -217,7 +204,7 @@ module AlcoViews{
         function onUpdate(dc) {
             // call base to reset view
             View.onUpdate(dc);
-            var teksti = new Text({:text => "Graph", :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_SMALL });
+            var teksti = new Text({:text => "Graph", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
             teksti.setLocation(50, 10);
             teksti.draw(dc);
             return true;
