@@ -133,8 +133,7 @@ class AlcoCalc {
         return promilles;
     }
 
-    function getGramsOfAlcoholNow(){
-
+    function getGramsOfAlcoholAtTime(time){
         var drinksTotal = _drinks.size();
 
         if(drinksTotal == 0){
@@ -142,7 +141,8 @@ class AlcoCalc {
         }
 
         var gramsOfAlcohol = 0;
-        var now = Time.now();
+        var now = time;
+        var userBurnRate = _userInfo.getBurnRate();
 
         for(var i = 0; i < drinksTotal; i++){
             var drink = _drinks[i];
@@ -150,10 +150,13 @@ class AlcoCalc {
             if(drink == null){
                 continue;
             }
+            var timeConsumed = drink.getTimeConsumed();
+            if(timeConsumed.greaterThan(now)){
+                continue;
+            }
 
-            var minutesSinceDrank = now.subtract(drink.getTimeConsumed()).value() / 60.0;
-            var gramsLeft = drink.getGramsOfAlcohol() - _userInfo.getBurnRate()* minutesSinceDrank;
-
+            var minutesSinceDrank = now.subtract(timeConsumed).value() / 60.0;
+            var gramsLeft = drink.getGramsOfAlcohol() - userBurnRate * minutesSinceDrank;
             if(gramsLeft < 0){
                 continue;
             }
@@ -163,11 +166,15 @@ class AlcoCalc {
          return gramsOfAlcohol;
     }
 
+
+    function getGramsOfAlcoholNow(){
+        return getGramsOfAlcoholAtTime(Time.now());
+    }
+
     function minutesUntilSober(){
         var alcoholLeftToBurn = getGramsOfAlcoholNow();
         var minutes = alcoholLeftToBurn / _userInfo.getBurnRate();
         return minutes;
-
     }
 }
 
@@ -185,7 +192,6 @@ class UserInfo{
         var profile = UserProfile.getProfile();
         var weight = profile.weight;
 
-        // TODO: AP doc states weight is in grams, is this true if weightUnits is not metric??
         var weightInKilos = weight / 1000.0;
 
         return weightInKilos;
@@ -442,22 +448,6 @@ class BeersApp extends App.AppBase {
 
     //! Return the initial view of your application here
     function getInitialView() {
-
-
-// never comment out code
-  //      var past = Greg.moment({:hour=> 23, :minute=>19, :day=>20});
-   //     var longTimeAgo = Greg.moment({:hour=> 6, :minute=>0, :day=>20});
-
-//        var drink1 = new Drink(12, past, "beer 3");
-//        var drink2 = new Drink(12, past,  "beer 3");
-//        var drink3 = new Drink(12, longTimeAgo, "beer 3");
-//        var drink4 = new Drink(12, longTimeAgo,  "beer 3");
-
-//        var drinks = [drink1, drink2, drink3, drink4 ];
-        //var temp = new Time.Moment(1459869965); // temp.value() -> ticks, new Time.Moment(ticks) ^^
-       //var infoa = Greg.info(temp, Time.FORMAT_SHORT);
-
-
         var bac = _alcoCalc.promillesNow();
         return [ new AlcoViews.MainView(_alcoCalc), new AlcoViewsNavigation.MainViewBehaviourDelegate(_alcoCalc) ];
     }

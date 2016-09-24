@@ -2,6 +2,9 @@ using Toybox.WatchUi as Ui;
 using Toybox.System;
 using Toybox.Graphics as Graphics;
 using Toybox.System as Sys;
+using Toybox.Time.Gregorian as Greg;
+using Toybox.Math as Math;
+using Toybox.Time as Time;
 
 module AlcoViews{
 
@@ -64,7 +67,16 @@ module AlcoViews{
             if(minutesUntilSober >= 60){
                 var hoursUntilSober = minutesUntilSober / 60.0;
 
-                soberText = hoursUntilSober.format("%d") + "+ hours til sober";
+                if(hoursUntilSober > 10){
+                    soberText = hoursUntilSober.format("%d") + "+ hours til sober";
+                }
+                else{
+                    // TODO 1.7 hour -> 2 hours but no roundin available in the framework :(
+                    soberText = hoursUntilSober.format("%.1f") + " hours til sober";
+                }
+
+
+
 
             }
             else if ( minutesUntilSober == 0){
@@ -147,45 +159,12 @@ module AlcoViews{
         }
     }
 
-    class SoberView extends Ui.View {
-
-        function initialize() {
-            View.initialize();
-        }
-
-        //! Load your resources here
-        function onLayout(dc) {
-            setLayout(Rez.Layouts.MainLayout(dc));
-        }
-
-        //! Called when this View is brought to the foreground. Restore
-        //! the state of this View and prepare it to be shown. This includes
-        //! loading resources into memory.
-        function onShow() {
-
-        }
-
-        //! Update the view
-        function onUpdate(dc) {
-            // call base to reset view
-            View.onUpdate(dc);
-            var teksti = new Text({:text => "Sober", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
-            teksti.setLocation(50, 10);
-            teksti.draw(dc);
-            return true;
-        }
-
-        //! Called when this View is removed from the screen. Save the
-        //! state of this View here. This includes freeing resources from
-        //! memory.
-        function onHide() {
-        }
-    }
-
     class GraphView extends Ui.View {
 
-        function initialize() {
+        var _alcoCalc;
+        function initialize(alcoCalc) {
             View.initialize();
+            _alcoCalc = alcoCalc;
         }
 
         //! Load your resources here
@@ -204,9 +183,68 @@ module AlcoViews{
         function onUpdate(dc) {
             // call base to reset view
             View.onUpdate(dc);
-            var teksti = new Text({:text => "Graph", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
-            teksti.setLocation(50, 10);
-            teksti.draw(dc);
+
+            var title = new Text({:text => "Graph", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
+            title.setLocation(50, 10);
+            title.draw(dc);
+
+            // 1 pixel = 1 minute, fenix 3 has 218 pixels so thats good 3+ hours of graph
+           var minutes = dc.getWidth();
+           var zeroLine = dc.getHeight() / 1.5;
+
+           var hours = minutes / 60;
+           //var hours = Math.floor();
+           var text = hours + " hours";
+           var subtitle = new Text({:text => text, :color=>Graphics.COLOR_LT_GRAY, :font=>Graphics.FONT_TINY });
+           subtitle.setLocation(50, zeroLine);
+           subtitle.draw(dc);
+
+           var yPoints = new [minutes];
+
+           var now = Time.now();
+           var ticksNow =  now.value();
+
+           for(var i = 0; i < minutes; i++){
+                // calculate promilles for each 5 min (serious performance issues otherwise!)
+                if( i != 0 && i % 5 != 0){
+                    yPoints[i] = yPoints[i-1]; // set previous value for non-calculated values
+                    continue;
+                }
+
+                var ticksPast = ticksNow - i * 60;
+                var timePast = new Time.Moment(ticksPast);
+                var bac = _alcoCalc.getGramsOfAlcoholAtTime(timePast);
+
+                if(bac != 0){
+                    bac = bac + 5; // graph would look small, add moar value!
+                }
+
+                var yPoint = zeroLine - bac;
+                yPoints[i] = yPoint;
+            }
+
+            // lets draw history!
+            for(var i = 0; i < yPoints.size()-1; i++){
+
+                var first = yPoints[i];
+                var second = yPoints[i+1];
+
+                var x = minutes-4-i; // move graph few pixels so that the bezel does not hide latest
+
+                // fill
+                dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
+                dc.drawLine(x, first, x, zeroLine);
+
+                // graph line
+                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+                dc.drawLine(x, first, x+1, second);
+            }
+
+            // draw zero line
+            dc.setColor(Graphics.COLOR_ORANGE, Graphics.COLOR_BLACK);
+            dc.drawLine(0, zeroLine, minutes, zeroLine);
+
+
             return true;
         }
 

@@ -2,11 +2,9 @@ using Toybox.WatchUi as Ui;
 using Toybox.System;
 using Toybox.Graphics as Graphics;
 
-module AlcoViewsNavigation{
+module AlcoViewsNavigation {
 using AlcoViews;
 
- // todo simpler way of navigating between views
-// view order: // main --start--> history --next--> sober  -next--> graph
    class DrinkMenuInputDelegate extends Ui.MenuInputDelegate{
 
         var _bartender;
@@ -72,37 +70,18 @@ using AlcoViews;
 
 
         function onNextPage() {
-            Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
+            Ui.switchToView(new AlcoViews.GraphView(_alcoCalc), new GraphViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
             Ui.requestUpdate();
             return true;
         }
 
         function onPreviousPage() {
-            Ui.switchToView(new AlcoViews.GraphView(), new GraphViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
+            Ui.switchToView(new AlcoViews.GraphView(_alcoCalc), new GraphViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
             Ui.requestUpdate();
             return true;
         }
     }
 
-    class SoberViewBehaviorDelegate extends Ui.BehaviorDelegate {
-
-        var _alcoCalc;
-        function initialize(alcoCalc){
-            _alcoCalc = alcoCalc;
-        }
-
-        function onNextPage() {
-            Ui.switchToView(new AlcoViews.GraphView(), new GraphViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
-            Ui.requestUpdate();
-            return true;
-        }
-
-        function onPreviousPage() {
-            Ui.switchToView(new AlcoViews.HistoryView(_alcoCalc), new HistoryViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
-            Ui.requestUpdate();
-            return true;
-        }
-    }
 
     class GraphViewBehaviorDelegate extends Ui.BehaviorDelegate {
 
@@ -118,7 +97,7 @@ using AlcoViews;
         }
 
         function onPreviousPage() {
-            Ui.switchToView(new AlcoViews.SoberView(), new SoberViewBehaviorDelegate(_alcoCalc) , SLIDE_DOWN);
+            Ui.switchToView(new AlcoViews.HistoryView(_alcoCalc), new HistoryViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
             Ui.requestUpdate();
             return true;
         }
