@@ -390,7 +390,7 @@ class BeersApp extends App.AppBase {
     }
 
     //! onStart() is called on application start up
-    function onStart() {
+    function onStart(state) {
         // load stuff
         var drinks = new [0];
         // key = ticks
