@@ -237,7 +237,7 @@ module AlcoViews{
 
                 // graph line
                 dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
-                dc.drawLine(x, first, x+1, second);
+                dc.drawLine(x+1, first, x, second);
             }
 
             // draw zero line
