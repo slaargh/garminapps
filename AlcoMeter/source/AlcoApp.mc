@@ -105,7 +105,7 @@ class AlcoCalc {
 
     function addDrink(drink){
 
-        // one can drink more than 21 but not in such fashon that the the first drink is still in blood
+        // one can drink more than 21 but not in such fashion that the first drink's alcohol is still in blood
         // except for the professionals
         if(_drinks.size() > 20){
             removeOldest();
@@ -382,8 +382,6 @@ class Bartender{
     }
 }
 
-
-
 class BeersApp extends App.AppBase {
 
     var _alcoCalc;
@@ -451,5 +449,4 @@ class BeersApp extends App.AppBase {
         var bac = _alcoCalc.promillesNow();
         return [ new AlcoViews.MainView(_alcoCalc), new AlcoViewsNavigation.MainViewBehaviourDelegate(_alcoCalc) ];
     }
-
 }

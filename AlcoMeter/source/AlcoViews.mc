@@ -2,7 +2,6 @@ using Toybox.WatchUi as Ui;
 using Toybox.System;
 using Toybox.Graphics as Graphics;
 using Toybox.System as Sys;
-using Toybox.Time.Gregorian as Greg;
 using Toybox.Math as Math;
 using Toybox.Time as Time;
 
@@ -74,10 +73,6 @@ module AlcoViews{
                     // TODO 1.7 hour -> 2 hours but no roundin available in the framework :(
                     soberText = hoursUntilSober.format("%.1f") + " hours til sober";
                 }
-
-
-
-
             }
             else if ( minutesUntilSober == 0){
                 soberText = "";
@@ -129,25 +124,18 @@ module AlcoViews{
             // call base to reset view
             View.onUpdate(dc);
 
-
-
-            var teksti = new Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
-            teksti.setLocation(50, 10);
-            teksti.draw(dc);
+            var title = new Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
+            title.setLocation(50, 10);
+            title.draw(dc);
 
             var history = _alcoCalc.getDrinkHistory();
 
-            //System.println(history.size());
-
             var size = history.size();
             for(var i = size-1; i >= 0; i--){
-                //System.println(history[i]);
-                var teksti = new Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
-                teksti.setLocation(35, 10 + 20*(size-i));
-                teksti.draw(dc);
-
+                var historyLine = new Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
+                historyLine.setLocation(35, 10 + 20*(size-i));
+                historyLine.draw(dc);
             }
-
 
             return true;
         }
