@@ -21,6 +21,7 @@ Had a drink or two? Fancy one more but not sure if you really should? No worries
 	* own drinks
 
 ## Planned code improvements
+- Improve graph code
 - Move classes from app to new file(s) / modules
 
 ## License

@@ -181,7 +181,6 @@ module AlcoViews{
            var zeroLine = dc.getHeight() / 1.5;
 
            var hours = minutes / 60;
-           //var hours = Math.floor();
            var text = hours + " hours";
            var subtitle = new Text({:text => text, :color=>Graphics.COLOR_LT_GRAY, :font=>Graphics.FONT_TINY });
            subtitle.setLocation(50, zeroLine);
@@ -191,11 +190,12 @@ module AlcoViews{
 
            var now = Time.now();
            var ticksNow =  now.value();
+           var resolution = 5;
 
            for(var i = 0; i < minutes; i++){
-                // calculate promilles for each 5 min (serious performance issues otherwise!)
-                if( i != 0 && i % 5 != 0){
-                    yPoints[i] = yPoints[i-1]; // set previous value for non-calculated values
+
+                if( i != 0 && i % resolution != 0){
+                    // NOTE calculate promilles only for each x min. Serious performance issues otherwise!)
                     continue;
                 }
 
@@ -211,21 +211,37 @@ module AlcoViews{
                 yPoints[i] = yPoint;
             }
 
-            // lets draw history!
-            for(var i = 0; i < yPoints.size()-1; i++){
+            // lets draw the graph from list of points
+            // TODO uses hard coded limit now, does not work with hw that has more pixels
+            var points = new [64]; // NOTE: 64 is the point limit, this will do since the graph has data points at minutes/resolutio which is 218/5 ~= 44
 
-                var first = yPoints[i];
-                var second = yPoints[i+1];
+            // initialize all points to zeroline
+            for(var i = 0; i < points.size(); i++){
+                points[i] = [minutes, zeroLine];
+            }
 
-                var x = minutes-4-i; // move graph few pixels so that the bezel does not hide latest
+            // fill in bac at given time (minutes)
+            var j = 0;
+            for(var i = 0; i < yPoints.size(); i++){
+                if(yPoints[i] == null){
+                    continue;
+                }
 
-                // fill
-                dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLACK);
-                dc.drawLine(x, first, x, zeroLine);
+                points[j] = [minutes-4-i, yPoints[i]]; // point: [minute, bac], substract some extra time so that bezel does not eat up space
+                j++;
+            }
 
-                // graph line
-                dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
-                dc.drawLine(x+1, first, x, second);
+            // draw the graph with fill polygon
+            dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLUE);
+            dc.fillPolygon(points);
+
+            // draw white line over the graph
+            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+            for(var i = 0; i < points.size()-1; i++){
+                var first = points[i];
+                var second = points[i+1];
+
+                dc.drawLine(first[0], first[1], second[0], second[1]);
             }
 
             // draw zero line

@@ -96,6 +96,11 @@ using AlcoViews;
             return true;
         }
 
+        function onBack(){
+            Ui.popView(Ui.SLIDE_RIGHT);
+            return true;
+        }
+
         function onPreviousPage() {
             Ui.switchToView(new AlcoViews.HistoryView(_alcoCalc), new HistoryViewBehaviorDelegate(_alcoCalc) , SLIDE_UP);
             Ui.requestUpdate();
