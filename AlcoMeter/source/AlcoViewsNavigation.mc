@@ -84,7 +84,6 @@ using AlcoViews;
         }
     }
 
-
     class GraphViewBehaviorDelegate extends Ui.BehaviorDelegate {
 
         var _alcoCalc;

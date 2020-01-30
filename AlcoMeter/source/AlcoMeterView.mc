@@ -37,7 +37,6 @@ module AlcoViews{
 
             var promillesNow = _alcoCalc.promillesNow();
 
-			// todo localize texts
             if(promillesNow == 0){
                 var noDrinkTxt1 = new Ui.Text({:text => "Press start twice", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
                 noDrinkTxt1.setLocation(90, 70);
@@ -263,35 +262,3 @@ module AlcoViews{
         }
     }
 }
-
-/*
-class AlcoMeterView extends WatchUi.View {
-
-    function initialize() {
-        View.initialize();
-    }
-
-    // Load your resources here
-    function onLayout(dc) {
-        setLayout(Rez.Layouts.MainLayout(dc));
-    }
-
-    // Called when this View is brought to the foreground. Restore
-    // the state of this View and prepare it to be shown. This includes
-    // loading resources into memory.
-    function onShow() {
-    }
-
-    // Update the view
-    function onUpdate(dc) {
-        // Call the parent onUpdate function to redraw the layout
-        View.onUpdate(dc);
-    }
-
-    // Called when this View is removed from the screen. Save the
-    // state of this View here. This includes freeing resources from
-    // memory.
-    function onHide() {
-    }
-
-} */

@@ -1,0 +1,6 @@
+- Localize app
+- Refactor app code: move classes/modules
+- Better history view/history data: 
+	- show data better
+	- more stats
+- auto clear drinks that are too old?

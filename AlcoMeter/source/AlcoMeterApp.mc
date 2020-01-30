@@ -3,7 +3,6 @@ using Toybox.System as Sys;
 using Toybox.Time as Time;
 using Toybox.Time.Gregorian as Greg;
 
-
 (:glance)    
 class AlcoCalc {
 
@@ -406,7 +405,6 @@ class AlcoMeterApp extends Application.AppBase {
     function getInitialView() {
  		var bac = _alcoCalc.promillesNow();
         return [ new AlcoViews.MainView(_alcoCalc), new AlcoViewsNavigation.MainViewBehaviourDelegate(_alcoCalc) ];
-        //return [ new AlcoMeterView() ];
     }
     
     (:glance)    

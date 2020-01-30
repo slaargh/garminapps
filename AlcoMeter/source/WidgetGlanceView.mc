@@ -23,7 +23,6 @@ class WidgetGlanceView extends Ui.GlanceView {
                 soberText = hoursUntilSober.format("%d") + " h til sober";
                 }
                 else{
-                    // Round 1.6 hour -> 2 hours: hoursUntilSober = Math.round(hoursUntilSober);
                     soberText = "~"+ hoursUntilSober.format("%.1f") + " h til sober";
                 }
             }
@@ -37,16 +36,13 @@ class WidgetGlanceView extends Ui.GlanceView {
             var txt;
             if(promillesNow == 0)
             {
-            txt = new Ui.Text({:text => "Alcometer: 0!\n Lets drink!", :color=>Graphics.COLOR_WHITE, :font=>Gfx.FONT_SMALL });
+           	 	txt = new Ui.Text({:text => "Alcometer: 0!\n Lets drink!", :color=>Graphics.COLOR_WHITE, :font=>Gfx.FONT_SMALL });
             }
             else
             {
             	txt = new Ui.Text({:text => formatPromilles +"ppm\n" + soberText, :color=>Graphics.COLOR_WHITE, :font=>Gfx.FONT_SMALL });
-            }
-            
-    	 //dc.setColor(Gfx.COLOR_BLACK, Gfx.COLOR_BLACK);
-    	 //dc.drawRectangle(0, 0, dc.getWidth(), dc.getHeight());
-    
+            }            
+   
             txt.setLocation(1, 1);
             txt.draw(dc);
     }
