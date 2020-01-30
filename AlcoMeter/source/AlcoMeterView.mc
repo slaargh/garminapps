@@ -37,12 +37,13 @@ module AlcoViews{
 
             var promillesNow = _alcoCalc.promillesNow();
 
+			// todo localize texts
             if(promillesNow == 0){
-                var noDrinkTxt1 = new Text({:text => "Press start twice", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
+                var noDrinkTxt1 = new Ui.Text({:text => "Press start twice", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
                 noDrinkTxt1.setLocation(90, 70);
                 noDrinkTxt1.draw(dc);
 
-                var noDrinkTxt2 = new Text({:text => "to add drinks!", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
+                var noDrinkTxt2 = new Ui.Text({:text => "to add drinks!", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
                 noDrinkTxt2.setLocation(100, 100);
                 noDrinkTxt2.draw(dc);
 
@@ -51,12 +52,12 @@ module AlcoViews{
             }
             var formatPromilles = promillesNow.format("%.2f");
 
-            var txt = new Text({:text => formatPromilles, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
+            var txt = new Ui.Text({:text => formatPromilles, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
             txt.setLocation(100, 80);
             txt.draw(dc);
 
             var drinkCount = _alcoCalc.getConsumedDrinks();
-            var txt2 = new Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE});
+            var txt2 = new Ui.Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE});
             txt2.setLocation(100, 70);
             txt2.draw(dc);
 
@@ -70,8 +71,8 @@ module AlcoViews{
                     soberText = hoursUntilSober.format("%d") + "+ hours til sober";
                 }
                 else{
-                    // TODO 1.7 hour -> 2 hours but no roundin available in the framework :(
-                    soberText = hoursUntilSober.format("%.1f") + " hours til sober";
+                    // Round 1.6 hour -> 2 hours: hoursUntilSober = Math.round(hoursUntilSober);
+                    soberText = "~"+ hoursUntilSober.format("%.1f") + " hours til sober";
                 }
             }
             else if ( minutesUntilSober == 0){
@@ -81,7 +82,7 @@ module AlcoViews{
                 soberText = minutesUntilSober.format("%d") + "+ mins til sober";
             }
 
-            var txt3 = new Text({:text => soberText, :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
+            var txt3 = new Ui.Text({:text => soberText, :color=>Graphics.COLOR_DK_GRAY, :font=>Graphics.FONT_TINY });
             txt3.setLocation(50, 165);
             txt3.draw(dc);
 
@@ -124,15 +125,15 @@ module AlcoViews{
             // call base to reset view
             View.onUpdate(dc);
 
-            var title = new Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
-            title.setLocation(50, 10);
+            var title = new Ui.Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
+            title.setLocation(57, 10);
             title.draw(dc);
 
             var history = _alcoCalc.getDrinkHistory();
 
             var size = history.size();
             for(var i = size-1; i >= 0; i--){
-                var historyLine = new Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
+                var historyLine = new Ui.Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
                 historyLine.setLocation(35, 10 + 20*(size-i));
                 historyLine.draw(dc);
             }
@@ -172,8 +173,8 @@ module AlcoViews{
             // call base to reset view
             View.onUpdate(dc);
 
-            var title = new Text({:text => "Graph", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_SMALL });
-            title.setLocation(50, 10);
+            var title = new Ui.Text({:text => "BAC over time", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
+            title.setLocation(57, 10);
             title.draw(dc);
 
             // 1 pixel = 1 minute, fenix 3 has 218 pixels so thats good 3+ hours of graph
@@ -182,8 +183,8 @@ module AlcoViews{
 
            var hours = minutes / 60;
            var text = hours + " hours";
-           var subtitle = new Text({:text => text, :color=>Graphics.COLOR_LT_GRAY, :font=>Graphics.FONT_TINY });
-           subtitle.setLocation(50, zeroLine);
+           var subtitle = new Ui.Text({:text => text, :color=>Graphics.COLOR_LT_GRAY, :font=>Graphics.FONT_TINY });
+           subtitle.setLocation(35, zeroLine);
            subtitle.draw(dc);
 
            var yPoints = new [minutes];
@@ -191,7 +192,7 @@ module AlcoViews{
            var now = Time.now();
            var ticksNow =  now.value();
            var resolution = 5;
-
+           
            for(var i = 0; i < minutes; i++){
 
                 if( i != 0 && i % resolution != 0){
@@ -204,7 +205,7 @@ module AlcoViews{
                 var bac = _alcoCalc.getGramsOfAlcoholAtTime(timePast);
 
                 if(bac != 0){
-                    bac = bac + 5; // graph would look small, add moar value!
+                    bac = bac + 6; // graph would look small, add moar value!
                 }
 
                 var yPoint = zeroLine - bac;
@@ -217,7 +218,7 @@ module AlcoViews{
 
             // initialize all points to zeroline
             for(var i = 0; i < points.size(); i++){
-                points[i] = [minutes, zeroLine];
+                points[i] = [0, zeroLine];
             }
 
             // fill in bac at given time (minutes)
@@ -230,18 +231,21 @@ module AlcoViews{
                 points[j] = [minutes-4-i, yPoints[i]]; // point: [minute, bac], substract some extra time so that bezel does not eat up space
                 j++;
             }
-
-            // draw the graph with fill polygon
-            dc.setColor(Graphics.COLOR_BLUE, Graphics.COLOR_BLUE);
-            dc.fillPolygon(points);
-
-            // draw white line over the graph
-            dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
+            
+            // draw white line over the graph            
             for(var i = 0; i < points.size()-1; i++){
                 var first = points[i];
                 var second = points[i+1];
 
+				// gray stripes                
+                dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLUE);
+                dc.drawLine(first[0], first[1], first[0], zeroLine);
+			
+				// bolded line :) 
+				dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);
                 dc.drawLine(first[0], first[1], second[0], second[1]);
+                dc.drawLine(first[0]+1, first[1], second[0]+1, second[1]);
+                
             }
 
             // draw zero line
@@ -259,3 +263,35 @@ module AlcoViews{
         }
     }
 }
+
+/*
+class AlcoMeterView extends WatchUi.View {
+
+    function initialize() {
+        View.initialize();
+    }
+
+    // Load your resources here
+    function onLayout(dc) {
+        setLayout(Rez.Layouts.MainLayout(dc));
+    }
+
+    // Called when this View is brought to the foreground. Restore
+    // the state of this View and prepare it to be shown. This includes
+    // loading resources into memory.
+    function onShow() {
+    }
+
+    // Update the view
+    function onUpdate(dc) {
+        // Call the parent onUpdate function to redraw the layout
+        View.onUpdate(dc);
+    }
+
+    // Called when this View is removed from the screen. Save the
+    // state of this View here. This includes freeing resources from
+    // memory.
+    function onHide() {
+    }
+
+} */

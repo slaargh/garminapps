@@ -1,3 +1,22 @@
 <strings>
-    <string id="AppName">Beers</string>
+    <string id="AppName">AlcoMeter</string>
+    <string id="Drink1NameTitle" scope="foreground">Drink 1 name</string>
+    <string id="Drink1AlcoholTitle" scope="foreground">Drink 1 alcohol %</string>
+    <string id="Drink1VolumeTitle" scope="foreground">Drink 1 volume in liters</string>
+    
+    <string id="Drink2NameTitle" scope="foreground">Drink 2 name</string>
+    <string id="Drink2AlcoholTitle" scope="foreground">Drink 2 alcohol %</string>
+    <string id="Drink2VolumeTitle" scope="foreground">Drink 2 volume in liters</string>
+    
+    <string id="Drink3NameTitle" scope="foreground">Drink 3 name</string>
+    <string id="Drink3AlcoholTitle" scope="foreground">Drink 3 alcohol %</string>
+    <string id="Drink3VolumeTitle" scope="foreground">Drink 3 volume in liters</string>
+    
+    <string id="Drink4NameTitle" scope="foreground">Drink 4 name</string>
+    <string id="Drink4AlcoholTitle" scope="foreground">Drink 4 alcohol %</string>
+    <string id="Drink4VolumeTitle" scope="foreground">Drink 4 volume in liters</string>
+    
+    <string id="Drink5NameTitle" scope="foreground">Drink 5 name</string>
+    <string id="Drink5AlcoholTitle" scope="foreground">Drink 5 alcohol %</string>
+    <string id="Drink5VolumeTitle" scope="foreground">Drink 5 volume in liters</string>
 </strings>

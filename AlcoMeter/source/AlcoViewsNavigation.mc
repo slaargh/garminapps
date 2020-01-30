@@ -11,6 +11,7 @@ using AlcoViews;
         var _alcoCalc;
 
         function initialize(bartender, alcoCalc){
+        	MenuInputDelegate.initialize();
             _bartender = bartender;
             _alcoCalc = alcoCalc;
         }
@@ -29,16 +30,17 @@ using AlcoViews;
 
                 _alcoCalc.addDrink(drink);
             }
-
+            
             return true;
         }
-    }
+    } 
 
     class HistoryViewBehaviorDelegate extends Ui.BehaviorDelegate {
 
         var _alcoCalc;
 
         function initialize(alcoCalc){
+    		BehaviorDelegate.initialize();
             _alcoCalc = alcoCalc;
         }
 
@@ -50,7 +52,7 @@ using AlcoViews;
 
 
        function onSelect() {
-            var menu = new Menu();
+            var menu = new Ui.Menu();
             var bartender = new Bartender();
             var drinkList = bartender.getDrinkList();
 
@@ -87,6 +89,7 @@ using AlcoViews;
 
         var _alcoCalc;
         function initialize(alcoCalc){
+        	BehaviorDelegate.initialize();
             _alcoCalc = alcoCalc;
         }
 
@@ -113,6 +116,7 @@ using AlcoViews;
         var _alcoCalc;
 
         function initialize(alcoCalc){
+       		BehaviorDelegate.initialize();
             _alcoCalc = alcoCalc;
         }
 

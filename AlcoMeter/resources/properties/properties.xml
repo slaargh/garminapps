@@ -1,0 +1,23 @@
+<properties>
+    <property id="Drink1Name" type="string">Beer, Can</property>
+    <property id="Drink1Volume" type="string">0.33</property>
+    <property id="Drink1Alcohol" type="string">4.5</property>
+    
+    <property id="Drink2Name" type="string">Beer, Pint</property>
+    <property id="Drink2Volume" type="string">0.568</property>
+    <property id="Drink2Alcohol" type="string">4.5</property>
+    
+    
+    <property id="Drink3Name" type="string">Wine</property>
+    <property id="Drink3Volume" type="string">0.150</property>
+    <property id="Drink3Alcohol" type="string">14</property>
+    
+    
+    <property id="Drink4Name" type="string">Vodka shot</property>
+    <property id="Drink4Volume" type="string">0.04</property>
+    <property id="Drink4Alcohol" type="string">40</property>
+    
+    <property id="Drink5Name" type="string">Caol Ila, 12yo</property>
+    <property id="Drink5Volume" type="string">0.05</property>
+    <property id="Drink5Alcohol" type="string">43</property>
+</properties>

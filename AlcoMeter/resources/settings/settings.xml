@@ -1,0 +1,48 @@
+<settings>
+    <setting propertyKey="@Properties.Drink1Name" title="@Strings.Drink1NameTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink1Volume" title="@Strings.Drink1VolumeTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting> 
+    <setting propertyKey="@Properties.Drink1Alcohol" title="@Strings.Drink1AlcoholTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink2Name" title="@Strings.Drink2NameTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink2Volume" title="@Strings.Drink2VolumeTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting> 
+    <setting propertyKey="@Properties.Drink2Alcohol" title="@Strings.Drink2AlcoholTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink3Name" title="@Strings.Drink3NameTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink3Volume" title="@Strings.Drink3VolumeTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting> 
+    <setting propertyKey="@Properties.Drink3Alcohol" title="@Strings.Drink3AlcoholTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink4Name" title="@Strings.Drink4NameTitle"  >
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink4Volume" title="@Strings.Drink4VolumeTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting> 
+    <setting propertyKey="@Properties.Drink4Alcohol" title="@Strings.Drink5AlcoholTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+        <setting propertyKey="@Properties.Drink5Name" title="@Strings.Drink5NameTitle"  >
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+    <setting propertyKey="@Properties.Drink5Volume" title="@Strings.Drink5VolumeTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting> 
+    <setting propertyKey="@Properties.Drink5Alcohol" title="@Strings.Drink5AlcoholTitle">
+        <settingConfig type="alphaNumeric" required="true" />
+    </setting>
+          
+</settings>
