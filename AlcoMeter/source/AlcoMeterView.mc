@@ -53,12 +53,12 @@ module AlcoViews{
             var formatPromilles = promillesNow.format("%.2f");
 
             var txt = new Ui.Text({:text => formatPromilles, :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_NUMBER_HOT});
-            txt.setLocation(100, 80);
+            txt.setLocation(100, Graphics.getFontHeight(Graphics.FONT_MEDIUM)+60);
             txt.draw(dc);
 
             var drinkCount = _alcoCalc.getConsumedDrinks();
-            var txt2 = new Ui.Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE});
-            txt2.setLocation(100, 70);
+            var txt2 = new Ui.Text({:text => "x " + drinkCount, :color=>Graphics.COLOR_BLUE, :font=>Graphics.FONT_MEDIUM});
+            txt2.setLocation(100, 60);
             txt2.draw(dc);
 
             var minutesUntilSober = _alcoCalc.minutesUntilSober();
