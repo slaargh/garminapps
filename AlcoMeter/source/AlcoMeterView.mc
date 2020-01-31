@@ -124,7 +124,7 @@ module AlcoViews{
             // call base to reset view
             View.onUpdate(dc);
 
-            var title = new Ui.Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
+            var title = new Ui.Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_XTINY });
             title.setLocation(57, 10);
             title.draw(dc);
 
@@ -237,8 +237,10 @@ module AlcoViews{
                 var second = points[i+1];
 
 				// gray stripes                
-                dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLUE);
+                dc.setColor(Graphics.COLOR_LT_GRAY, Graphics.COLOR_BLUE);
                 dc.drawLine(first[0], first[1], first[0], zeroLine);
+                dc.setColor(Graphics.COLOR_DK_GRAY, Graphics.COLOR_BLUE);
+                dc.drawLine(first[0]+1, first[1], first[0]+1, zeroLine);
 			
 				// bolded line :) 
 				dc.setColor(Graphics.COLOR_WHITE, Graphics.COLOR_BLACK);

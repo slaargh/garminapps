@@ -176,7 +176,8 @@ class AlcoCalc {
         return minutes;
     }
 }
-   (:glance)    
+
+(:glance)    
 class UserInfo{
 
     function getBurnRate(){
@@ -210,7 +211,8 @@ class UserInfo{
         return r;
     }
 }
-   (:glance)    
+
+(:glance)    
 class Drink{
 
     var _id;
@@ -255,7 +257,7 @@ class Drink{
     }
 }
 
-   (:glance)   
+(:glance)   
 class Drinkable{
     var name;
     var percent;
@@ -276,7 +278,7 @@ class Drinkable{
     }
 }
 
-   (:glance)   
+(:glance)   
 class Bartender{
 
     const AlcoholDensity = 789.0;
@@ -372,7 +374,7 @@ class AlcoMeterApp extends Application.AppBase {
             }
         }
         else{
-      	  Toybox.Application.Storage.setValue(1, drinks); 
+        	Toybox.Application.Storage.setValue(1, drinks); 
         } 
 		
 		
@@ -394,11 +396,9 @@ class AlcoMeterApp extends Application.AppBase {
             // history was cleared, remove property
             Toybox.Application.Storage.clearValues();
         }
-	
-	Toybox.Application.Storage.setValue(1, drinksToSave);
-    
-
-     return true;
+        
+        Toybox.Application.Storage.setValue(1, drinksToSave);
+    	return true;
     }
 
     // Return the initial view of your application here
