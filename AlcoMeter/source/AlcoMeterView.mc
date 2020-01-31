@@ -124,7 +124,7 @@ module AlcoViews{
             // call base to reset view
             View.onUpdate(dc);
 
-            var title = new Ui.Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_XTINY });
+            var title = new Ui.Text({:text => "History", :color=>Graphics.COLOR_ORANGE, :font=>Graphics.FONT_TINY });
             title.setLocation(57, 10);
             title.draw(dc);
 
@@ -132,7 +132,7 @@ module AlcoViews{
 
             var size = history.size();
             for(var i = size-1; i >= 0; i--){
-                var historyLine = new Ui.Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_TINY });
+                var historyLine = new Ui.Text({:text => history[i], :color=>Graphics.COLOR_WHITE, :font=>Graphics.FONT_XTINY });
                 historyLine.setLocation(35, 10 + 20*(size-i));
                 historyLine.draw(dc);
             }
