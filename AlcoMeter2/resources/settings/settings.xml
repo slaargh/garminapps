@@ -1,0 +1,20 @@
+<settings>
+    <setting propertyKey="@Properties.abv" title="@Strings.AbvTitle">
+        <settingConfig type="numeric" min="0.5" max="15" />
+    </setting>
+    <setting propertyKey="@Properties.volumeMl" title="@Strings.VolumeTitle">
+        <settingConfig type="numeric" min="100" max="1000" />
+    </setting>
+    <setting propertyKey="@Properties.eliminationRate" title="@Strings.EliminationTitle">
+        <settingConfig type="numeric" min="0.05" max="0.3" />
+    </setting>
+    <setting propertyKey="@Properties.fallbackWeightKg" title="@Strings.WeightTitle">
+        <settingConfig type="numeric" min="30" max="250" />
+    </setting>
+    <setting propertyKey="@Properties.fallbackSex" title="@Strings.SexTitle">
+        <settingConfig type="list">
+            <listEntry value="1">@Strings.Male</listEntry>
+            <listEntry value="0">@Strings.Female</listEntry>
+        </settingConfig>
+    </setting>
+</settings>

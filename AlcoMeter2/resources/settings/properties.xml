@@ -1,0 +1,7 @@
+<properties>
+    <property id="abv" type="float">4.7</property>
+    <property id="volumeMl" type="number">330</property>
+    <property id="eliminationRate" type="float">0.15</property>
+    <property id="fallbackWeightKg" type="number">80</property>
+    <property id="fallbackSex" type="number">1</property>
+</properties>
